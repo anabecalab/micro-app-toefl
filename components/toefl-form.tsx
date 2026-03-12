@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
     ChevronRight,
     CheckCircle2,
@@ -204,457 +204,524 @@ export function ToeflForm() {
     }
 
     // ─── SUCCESS / GUIDE SCREEN ──────────────────────
+    const guideTopRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (isSuccess) {
+            window.scrollTo({ top: 0, behavior: "instant" })
+        }
+    }, [isSuccess])
+
     if (isSuccess) {
         return (
             <div
-                className="flex min-h-screen flex-col items-center justify-start overflow-y-auto p-4 py-8"
+                ref={guideTopRef}
+                className="min-h-screen pb-16"
                 style={{ backgroundColor: colors.darkBlue }}
             >
-                <div className="w-full max-w-lg animate-scale-in">
-                    {/* Header */}
-                    <div
-                        className="mb-6 flex flex-col items-center rounded-[2.5rem] p-8 text-center shadow-2xl"
-                        style={{
-                            backgroundColor: "#1e1a5e",
-                            border: `1.5px solid ${colors.lavender}35`,
-                        }}
-                    >
-                        <div
-                            className="mb-4 flex h-16 w-16 items-center justify-center rounded-full"
-                            style={{ backgroundColor: `${colors.lightGreen}20` }}
-                        >
-                            <CheckCircle2 size={32} style={{ color: colors.lightGreen }} />
-                        </div>
-
-                        <h2
-                            className="mb-1 text-xl font-black"
-                            style={{ color: "#ffffff" }}
-                        >
-                            ¡Listo, {formData.name.split(" ")[0]}!
-                        </h2>
-                        <p
-                            className="mb-4 text-sm"
-                            style={{ color: "rgba(255,255,255,0.75)" }}
-                        >
-                            Tu registro fue exitoso. Aquí tienes tu{" "}
-                            <strong style={{ color: colors.lightGreen }}>
-                                Guía TOEFL 2026
-                            </strong>
-                            .
-                        </p>
-
-                        <div
-                            className="w-full rounded-2xl p-4 text-left"
+                {/* ─── STICKY GLASSMORPHISM BAR ─── */}
+                <div
+                    className="sticky top-0 z-50 px-4 py-2.5 backdrop-blur-xl"
+                    style={{
+                        backgroundColor: "rgba(49,44,142,0.85)",
+                        borderBottom: "1px solid rgba(177,162,210,0.15)",
+                    }}
+                >
+                    <div className="mx-auto flex max-w-lg gap-2">
+                        <a
+                            href="https://www.becalab.org/plus"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-1 items-center gap-2 rounded-xl px-3 py-2 transition-all hover:brightness-110 active:scale-[0.98]"
                             style={{
-                                backgroundColor: `${colors.mediumBlue}15`,
-                                border: `1px solid ${colors.lightGreen}30`,
+                                backgroundColor: "rgba(213,237,134,0.12)",
+                                border: "1px solid rgba(213,237,134,0.25)",
                             }}
                         >
-                            <p
-                                className="text-[10px] font-black uppercase tracking-widest"
-                                style={{ color: colors.lightGreen }}
+                            <img
+                                src="/images/becalabplus-logo.png"
+                                alt="BecaLab+"
+                                width={28}
+                                height={28}
+                                className="shrink-0 rounded-md"
+                            />
+                            <div className="min-w-0">
+                                <p className="truncate text-[10px] font-black leading-tight" style={{ color: colors.lightGreen }}>BecaLab+</p>
+                                <p className="truncate text-[8px] leading-tight" style={{ color: colors.lavender }}>¿Necesitas asesoría?</p>
+                            </div>
+                        </a>
+                        <a
+                            href="https://www.becalab.org/becabot"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-1 items-center gap-2 rounded-xl px-3 py-2 transition-all hover:brightness-110 active:scale-[0.98]"
+                            style={{
+                                backgroundColor: "rgba(75,80,208,0.25)",
+                                border: "1px solid rgba(177,162,210,0.2)",
+                            }}
+                        >
+                            <img
+                                src="/images/becabot-logo.png"
+                                alt="BecaBot"
+                                width={28}
+                                height={28}
+                                className="shrink-0 rounded-md"
+                            />
+                            <div className="min-w-0">
+                                <p className="truncate text-[10px] font-black leading-tight" style={{ color: "#ffffff" }}>BecaBot</p>
+                                <p className="truncate text-[8px] leading-tight" style={{ color: colors.lavender }}>Busca más becas</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div className="mx-auto w-full max-w-lg px-4 pt-6">
+                    <div className="w-full animate-scale-in">
+                        {/* Header */}
+                        <div
+                            className="mb-6 flex flex-col items-center rounded-[2.5rem] p-8 text-center shadow-2xl"
+                            style={{
+                                backgroundColor: "#1e1a5e",
+                                border: `1.5px solid ${colors.lavender}35`,
+                            }}
+                        >
+                            <div
+                                className="mb-4 flex h-16 w-16 items-center justify-center rounded-full"
+                                style={{ backgroundColor: `${colors.lightGreen}20` }}
                             >
-                                Guía exclusiva
-                            </p>
-                            <p
-                                className="mt-1 text-xs font-bold"
+                                <CheckCircle2 size={32} style={{ color: colors.lightGreen }} />
+                            </div>
+
+                            <h2
+                                className="mb-1 text-xl font-black"
                                 style={{ color: "#ffffff" }}
                             >
-                                Todo sobre el nuevo TOEFL 2026: formato, secciones, tips y
-                                estrategia de estudio.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* ─── GUIDE CONTENT ─── */}
-                    <div className="guide-scroll space-y-1">
-                        {/* WHAT CHANGED */}
-                        <GuideSection
-                            emoji="⚡️"
-                            title="LO QUE CAMBIÓ (Y DEBES SABER YA)"
-                            icon={<Zap size={18} style={{ color: colors.gold }} />}
-                        >
-                            <ul className="ml-1 space-y-2">
-                                <li>
-                                    El examen{" "}
-                                    <strong style={{ color: "#fff" }}>
-                                        ya no es una prueba de resistencia de 3 horas
-                                    </strong>
-                                    . Ahora es un{" "}
-                                    <strong style={{ color: colors.lightGreen }}>
-                                        sprint de 90 minutos
-                                    </strong>
-                                    .
-                                </li>
-                                <li>
-                                    <strong style={{ color: "#fff" }}>Es Adaptativo:</strong> Si
-                                    te va bien en el primer bloque, el segundo será más difícil (y
-                                    valdrá más puntos).{" "}
-                                    <em>
-                                        No te asustes si sientes que las preguntas suben de nivel;
-                                        ¡es buena señal!
-                                    </em>
-                                </li>
-                                <li>
-                                    <strong style={{ color: "#fff" }}>Resultados:</strong> En 72
-                                    horas los tienes en tu mail.
-                                </li>
-                                <li>
-                                    <strong style={{ color: "#fff" }}>Nota:</strong> Olvida el
-                                    0-120. Ahora es del{" "}
-                                    <strong style={{ color: colors.lightGreen }}>
-                                        1 al 6 (Escala CEFR)
-                                    </strong>
-                                    .
-                                </li>
-                            </ul>
-                        </GuideSection>
-
-                        {/* READING */}
-                        <GuideSection
-                            emoji="📖"
-                            title="READING (3 Tareas Nuevas)"
-                            icon={<BookOpen size={18} style={{ color: colors.lightGreen }} />}
-                        >
-                            <p className="mb-3" style={{ color: colors.gold }}>
-                                <strong>Adiós a los textos de 800 palabras.</strong>
+                                ¡Listo, {formData.name.split(" ")[0]}!
+                            </h2>
+                            <p
+                                className="mb-4 text-sm"
+                                style={{ color: "rgba(255,255,255,0.75)" }}
+                            >
+                                Tu registro fue exitoso. Aquí tienes tu{" "}
+                                <strong style={{ color: colors.lightGreen }}>
+                                    Guía TOEFL 2026
+                                </strong>
+                                .
                             </p>
 
-                            <p className="mb-1">
-                                <strong style={{ color: "#fff" }}>
-                                    1. Complete the Words:
-                                </strong>{" "}
-                                Un párrafo con palabras &quot;mochas&quot; (faltan letras).
-                            </p>
-                            <Tip>
-                                No leas el texto entero primero. Ve directo a la palabra y
-                                fíjate en la gramática (¿es plural?, ¿es un pasado?).
-                            </Tip>
-
-                            <p className="mb-1 mt-3">
-                                <strong style={{ color: "#fff" }}>
-                                    2. Read in Daily Life:
-                                </strong>{" "}
-                                Mails, menús, anuncios.
-                            </p>
-                            <Tip>
-                                Aquí el truco es el <em>Scanning</em>. Busca la información
-                                específica que te piden, no intentes entender el &quot;contexto
-                                profundo&quot; del menú.
-                            </Tip>
-
-                            <p className="mb-1 mt-3">
-                                <strong style={{ color: "#fff" }}>
-                                    3. Read an Academic Passage:
-                                </strong>{" "}
-                                Un texto corto (200 palabras).
-                            </p>
-                            <Tip>
-                                Al ser corto, las preguntas son muy específicas sobre
-                                inferencias. Lee entre líneas.
-                            </Tip>
-                        </GuideSection>
-
-                        {/* LISTENING */}
-                        <GuideSection
-                            emoji="🎧"
-                            title="LISTENING (Más rápido, más real)"
-                            icon={<Headphones size={18} style={{ color: colors.mediumBlue }} />}
-                        >
-                            <p className="mb-3" style={{ color: colors.gold }}>
-                                <strong>Ya no son monólogos aburridos.</strong>
-                            </p>
-                            <p className="mb-2">
-                                <strong style={{ color: "#fff" }}>Tareas:</strong> Listen &
-                                Choose a Response, Conversations, Mini-lectures y Discussions.
-                            </p>
-                            <p className="mb-2">
-                                <strong style={{ color: "#fff" }}>La Diferencia:</strong> El
-                                lenguaje es mucho más natural (con muletillas y pausas reales).
-                            </p>
-                            <Tip>
-                                Toma menos notas. Al ser audios cortos, si te distraes
-                                escribiendo, pierdes el hilo. Entrena tu memoria a corto plazo.
-                            </Tip>
-                        </GuideSection>
-
-                        {/* SPEAKING */}
-                        <GuideSection
-                            emoji="🎤"
-                            title="SPEAKING (El mayor reto: 8 Minutos)"
-                            icon={<Mic size={18} style={{ color: "#f472b6" }} />}
-                        >
-                            <p className="mb-3" style={{ color: colors.gold }}>
-                                <strong>Sin tiempo de preparación.</strong>
-                            </p>
-
-                            <p className="mb-1">
-                                <strong style={{ color: "#fff" }}>
-                                    1. Listen and Repeat:
-                                </strong>{" "}
-                                Escuchas 7 oraciones y las repites.
-                            </p>
-                            <Tip>
-                                No te enfoques solo en las palabras, imita la entonación. Si
-                                suena como pregunta, dilo como pregunta.
-                            </Tip>
-
-                            <p className="mb-1 mt-3">
-                                <strong style={{ color: "#fff" }}>
-                                    2. Take an Interview:
-                                </strong>{" "}
-                                4 preguntas espontáneas.
-                            </p>
-                            <Tip>
-                                ¡No hay reloj de preparación! Tienes que empezar a hablar en
-                                cuanto termine la pregunta. Practica grabar audios de WhatsApp a
-                                tus amigos en inglés para perder el miedo a la espontaneidad.
-                            </Tip>
-                        </GuideSection>
-
-                        {/* WRITING */}
-                        <GuideSection
-                            emoji="✍️"
-                            title="WRITING (Escribir bajo presión: 23 Minutos)"
-                            icon={<PenTool size={18} style={{ color: "#34d399" }} />}
-                        >
-                            <p className="mb-3" style={{ color: colors.gold }}>
-                                <strong>Se acabó el ensayo de 5 párrafos.</strong>
-                            </p>
-
-                            <p className="mb-1">
-                                <strong style={{ color: "#fff" }}>
-                                    1. Build a Sentence:
-                                </strong>{" "}
-                                Ordenar palabras para crear oraciones complejas.
-                            </p>
-                            <Tip>
-                                Repasa conectores (<em>however, nonetheless, although</em>). El
-                                sistema busca que sepas estructurar, no solo vocabulario.
-                            </Tip>
-
-                            <p className="mb-1 mt-3">
-                                <strong style={{ color: "#fff" }}>2. Write an Email:</strong>{" "}
-                                Tienes 7 minutos.
-                            </p>
-                            <Tip>
-                                Sé directo. Usa un saludo formal, el cuerpo del mensaje y una
-                                despedida clara. No rellenes con paja.
-                            </Tip>
-
-                            <p className="mb-1 mt-3">
-                                <strong style={{ color: "#fff" }}>
-                                    3. Academic Discussion:
-                                </strong>{" "}
-                                Escribir en un foro.
-                            </p>
-                            <Tip>
-                                Responde a lo que dijeron los &quot;otros alumnos&quot; en el
-                                prompt. El algoritmo premia que sepas interactuar con otras
-                                ideas.
-                            </Tip>
-                        </GuideSection>
-
-                        {/* STRATEGY */}
-                        <GuideSection
-                            emoji="🛠"
-                            title="MI ESTRATEGIA DE ESTUDIO 2026"
-                            icon={<Target size={18} style={{ color: colors.gold }} />}
-                        >
-                            <ul className="ml-1 space-y-2">
-                                <li>
-                                    <strong style={{ color: "#fff" }}>
-                                        Apps sobre Libros:
-                                    </strong>{" "}
-                                    Usa simuladores actualizados. Si el software no es adaptativo,
-                                    no te sirve para practicar la presión real.
-                                </li>
-                                <li>
-                                    <strong style={{ color: "#fff" }}>
-                                        Sin Cronómetro no hay Práctica:
-                                    </strong>{" "}
-                                    En este formato, el tiempo es el enemigo #1. Si practicas
-                                    Speaking, hazlo sin pausar para pensar.
-                                </li>
-                                <li>
-                                    <strong style={{ color: "#fff" }}>
-                                        Fuentes Oficiales:
-                                    </strong>{" "}
-                                    Solo confía en materiales que mencionen el cambio de enero
-                                    2026.
-                                </li>
-                            </ul>
-                        </GuideSection>
-
-                        {/* GOLDEN NOTE */}
-                        <div
-                            className="mb-6 rounded-2xl p-5"
-                            style={{
-                                backgroundColor: `${colors.gold}15`,
-                                border: `1.5px solid ${colors.gold}40`,
-                            }}
-                        >
-                            <div className="mb-2 flex items-center gap-2">
-                                <AlertTriangle size={18} style={{ color: colors.gold }} />
+                            <div
+                                className="w-full rounded-2xl p-4 text-left"
+                                style={{
+                                    backgroundColor: `${colors.mediumBlue}15`,
+                                    border: `1px solid ${colors.lightGreen}30`,
+                                }}
+                            >
                                 <p
-                                    className="text-sm font-black"
-                                    style={{ color: colors.gold }}
+                                    className="text-[10px] font-black uppercase tracking-widest"
+                                    style={{ color: colors.lightGreen }}
                                 >
-                                    ⚠️ NOTA DE ORO
+                                    Guía exclusiva
+                                </p>
+                                <p
+                                    className="mt-1 text-xs font-bold"
+                                    style={{ color: "#ffffff" }}
+                                >
+                                    Todo sobre el nuevo TOEFL 2026: formato, secciones, tips y
+                                    estrategia de estudio.
                                 </p>
                             </div>
-                            <p
-                                className="text-[13px] leading-relaxed"
-                                style={{ color: "rgba(255,255,255,0.85)" }}
-                            >
-                                Antes de pagar el examen,{" "}
-                                <strong style={{ color: "#fff" }}>
-                                    confirma que tu universidad ya acepta la escala 1-6
-                                </strong>
-                                . Algunas universidades top aún están actualizando sus sistemas
-                                de admisión.
-                            </p>
                         </div>
-                    </div>
 
-                    {/* ─── BECABOT SECTION ─── */}
-                    <section
-                        className="relative mt-6 mb-4 overflow-hidden rounded-[2.5rem] p-8 text-center shadow-2xl"
-                        style={{ backgroundColor: "rgba(75,80,208,0.25)", border: "1px solid rgba(177,162,210,0.2)" }}
-                    >
-                        <div className="relative z-10 flex flex-col items-center">
-                            <div className="mb-6 h-24 w-24 rotate-2 overflow-hidden rounded-3xl shadow-2xl transition-transform hover:rotate-0">
-                                <img
-                                    src="/images/becabot-logo.png"
-                                    alt="BecaBot Logo"
-                                    width={96}
-                                    height={96}
-                                    className="h-full w-full object-cover"
-                                />
-                            </div>
-                            <h3 className="mb-2 text-2xl font-black" style={{ color: "#ffffff" }}>
-                                ¿Quieres más becas?
-                            </h3>
-                            <p className="mb-8 max-w-xs text-sm leading-relaxed" style={{ color: colors.lavender }}>
-                                Encuentra cientos de opciones en{" "}
-                                <strong style={{ color: colors.lightGreen }}>BecaBot</strong>
-                                , disponible en WhatsApp y Web.
-                            </p>
-                            <a
-                                href="https://www.becalab.org/becabot"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-black shadow-lg transition-all hover:brightness-110 active:scale-[0.98]"
-                                style={{ backgroundColor: colors.lightGreen, color: colors.darkBlue }}
+                        {/* ─── GUIDE CONTENT ─── */}
+                        <div className="guide-scroll space-y-1">
+                            {/* WHAT CHANGED */}
+                            <GuideSection
+                                emoji="⚡️"
+                                title="LO QUE CAMBIÓ (Y DEBES SABER YA)"
+                                icon={<Zap size={18} style={{ color: colors.gold }} />}
                             >
-                                IR A BECABOT <ChevronRight size={20} />
-                            </a>
-                            <div className="mt-6 flex justify-center gap-6 text-[10px] font-black uppercase tracking-widest">
-                                <a
-                                    href="https://www.becalab.org/becabot"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-1.5 transition-colors hover:opacity-80"
-                                    style={{ color: colors.lightGreen }}
+                                <ul className="ml-1 space-y-2">
+                                    <li>
+                                        El examen{" "}
+                                        <strong style={{ color: "#fff" }}>
+                                            ya no es una prueba de resistencia de 3 horas
+                                        </strong>
+                                        . Ahora es un{" "}
+                                        <strong style={{ color: colors.lightGreen }}>
+                                            sprint de 90 minutos
+                                        </strong>
+                                        .
+                                    </li>
+                                    <li>
+                                        <strong style={{ color: "#fff" }}>Es Adaptativo:</strong> Si
+                                        te va bien en el primer bloque, el segundo será más difícil (y
+                                        valdrá más puntos).{" "}
+                                        <em>
+                                            No te asustes si sientes que las preguntas suben de nivel;
+                                            ¡es buena señal!
+                                        </em>
+                                    </li>
+                                    <li>
+                                        <strong style={{ color: "#fff" }}>Resultados:</strong> En 72
+                                        horas los tienes en tu mail.
+                                    </li>
+                                    <li>
+                                        <strong style={{ color: "#fff" }}>Nota:</strong> Olvida el
+                                        0-120. Ahora es del{" "}
+                                        <strong style={{ color: colors.lightGreen }}>
+                                            1 al 6 (Escala CEFR)
+                                        </strong>
+                                        .
+                                    </li>
+                                </ul>
+                            </GuideSection>
+
+                            {/* READING */}
+                            <GuideSection
+                                emoji="📖"
+                                title="READING (3 Tareas Nuevas)"
+                                icon={<BookOpen size={18} style={{ color: colors.lightGreen }} />}
+                            >
+                                <p className="mb-3" style={{ color: colors.gold }}>
+                                    <strong>Adiós a los textos de 800 palabras.</strong>
+                                </p>
+
+                                <p className="mb-1">
+                                    <strong style={{ color: "#fff" }}>
+                                        1. Complete the Words:
+                                    </strong>{" "}
+                                    Un párrafo con palabras &quot;mochas&quot; (faltan letras).
+                                </p>
+                                <Tip>
+                                    No leas el texto entero primero. Ve directo a la palabra y
+                                    fíjate en la gramática (¿es plural?, ¿es un pasado?).
+                                </Tip>
+
+                                <p className="mb-1 mt-3">
+                                    <strong style={{ color: "#fff" }}>
+                                        2. Read in Daily Life:
+                                    </strong>{" "}
+                                    Mails, menús, anuncios.
+                                </p>
+                                <Tip>
+                                    Aquí el truco es el <em>Scanning</em>. Busca la información
+                                    específica que te piden, no intentes entender el &quot;contexto
+                                    profundo&quot; del menú.
+                                </Tip>
+
+                                <p className="mb-1 mt-3">
+                                    <strong style={{ color: "#fff" }}>
+                                        3. Read an Academic Passage:
+                                    </strong>{" "}
+                                    Un texto corto (200 palabras).
+                                </p>
+                                <Tip>
+                                    Al ser corto, las preguntas son muy específicas sobre
+                                    inferencias. Lee entre líneas.
+                                </Tip>
+                            </GuideSection>
+
+                            {/* LISTENING */}
+                            <GuideSection
+                                emoji="🎧"
+                                title="LISTENING (Más rápido, más real)"
+                                icon={<Headphones size={18} style={{ color: colors.mediumBlue }} />}
+                            >
+                                <p className="mb-3" style={{ color: colors.gold }}>
+                                    <strong>Ya no son monólogos aburridos.</strong>
+                                </p>
+                                <p className="mb-2">
+                                    <strong style={{ color: "#fff" }}>Tareas:</strong> Listen &
+                                    Choose a Response, Conversations, Mini-lectures y Discussions.
+                                </p>
+                                <p className="mb-2">
+                                    <strong style={{ color: "#fff" }}>La Diferencia:</strong> El
+                                    lenguaje es mucho más natural (con muletillas y pausas reales).
+                                </p>
+                                <Tip>
+                                    Toma menos notas. Al ser audios cortos, si te distraes
+                                    escribiendo, pierdes el hilo. Entrena tu memoria a corto plazo.
+                                </Tip>
+                            </GuideSection>
+
+                            {/* SPEAKING */}
+                            <GuideSection
+                                emoji="🎤"
+                                title="SPEAKING (El mayor reto: 8 Minutos)"
+                                icon={<Mic size={18} style={{ color: "#f472b6" }} />}
+                            >
+                                <p className="mb-3" style={{ color: colors.gold }}>
+                                    <strong>Sin tiempo de preparación.</strong>
+                                </p>
+
+                                <p className="mb-1">
+                                    <strong style={{ color: "#fff" }}>
+                                        1. Listen and Repeat:
+                                    </strong>{" "}
+                                    Escuchas 7 oraciones y las repites.
+                                </p>
+                                <Tip>
+                                    No te enfoques solo en las palabras, imita la entonación. Si
+                                    suena como pregunta, dilo como pregunta.
+                                </Tip>
+
+                                <p className="mb-1 mt-3">
+                                    <strong style={{ color: "#fff" }}>
+                                        2. Take an Interview:
+                                    </strong>{" "}
+                                    4 preguntas espontáneas.
+                                </p>
+                                <Tip>
+                                    ¡No hay reloj de preparación! Tienes que empezar a hablar en
+                                    cuanto termine la pregunta. Practica grabar audios de WhatsApp a
+                                    tus amigos en inglés para perder el miedo a la espontaneidad.
+                                </Tip>
+                            </GuideSection>
+
+                            {/* WRITING */}
+                            <GuideSection
+                                emoji="✍️"
+                                title="WRITING (Escribir bajo presión: 23 Minutos)"
+                                icon={<PenTool size={18} style={{ color: "#34d399" }} />}
+                            >
+                                <p className="mb-3" style={{ color: colors.gold }}>
+                                    <strong>Se acabó el ensayo de 5 párrafos.</strong>
+                                </p>
+
+                                <p className="mb-1">
+                                    <strong style={{ color: "#fff" }}>
+                                        1. Build a Sentence:
+                                    </strong>{" "}
+                                    Ordenar palabras para crear oraciones complejas.
+                                </p>
+                                <Tip>
+                                    Repasa conectores (<em>however, nonetheless, although</em>). El
+                                    sistema busca que sepas estructurar, no solo vocabulario.
+                                </Tip>
+
+                                <p className="mb-1 mt-3">
+                                    <strong style={{ color: "#fff" }}>2. Write an Email:</strong>{" "}
+                                    Tienes 7 minutos.
+                                </p>
+                                <Tip>
+                                    Sé directo. Usa un saludo formal, el cuerpo del mensaje y una
+                                    despedida clara. No rellenes con paja.
+                                </Tip>
+
+                                <p className="mb-1 mt-3">
+                                    <strong style={{ color: "#fff" }}>
+                                        3. Academic Discussion:
+                                    </strong>{" "}
+                                    Escribir en un foro.
+                                </p>
+                                <Tip>
+                                    Responde a lo que dijeron los &quot;otros alumnos&quot; en el
+                                    prompt. El algoritmo premia que sepas interactuar con otras
+                                    ideas.
+                                </Tip>
+                            </GuideSection>
+
+                            {/* STRATEGY */}
+                            <GuideSection
+                                emoji="🛠"
+                                title="MI ESTRATEGIA DE ESTUDIO 2026"
+                                icon={<Target size={18} style={{ color: colors.gold }} />}
+                            >
+                                <ul className="ml-1 space-y-2">
+                                    <li>
+                                        <strong style={{ color: "#fff" }}>
+                                            Apps sobre Libros:
+                                        </strong>{" "}
+                                        Usa simuladores actualizados. Si el software no es adaptativo,
+                                        no te sirve para practicar la presión real.
+                                    </li>
+                                    <li>
+                                        <strong style={{ color: "#fff" }}>
+                                            Sin Cronómetro no hay Práctica:
+                                        </strong>{" "}
+                                        En este formato, el tiempo es el enemigo #1. Si practicas
+                                        Speaking, hazlo sin pausar para pensar.
+                                    </li>
+                                    <li>
+                                        <strong style={{ color: "#fff" }}>
+                                            Fuentes Oficiales:
+                                        </strong>{" "}
+                                        Solo confía en materiales que mencionen el cambio de enero
+                                        2026.
+                                    </li>
+                                </ul>
+                            </GuideSection>
+
+                            {/* GOLDEN NOTE */}
+                            <div
+                                className="mb-6 rounded-2xl p-5"
+                                style={{
+                                    backgroundColor: `${colors.gold}15`,
+                                    border: `1.5px solid ${colors.gold}40`,
+                                }}
+                            >
+                                <div className="mb-2 flex items-center gap-2">
+                                    <AlertTriangle size={18} style={{ color: colors.gold }} />
+                                    <p
+                                        className="text-sm font-black"
+                                        style={{ color: colors.gold }}
+                                    >
+                                        ⚠️ NOTA DE ORO
+                                    </p>
+                                </div>
+                                <p
+                                    className="text-[13px] leading-relaxed"
+                                    style={{ color: "rgba(255,255,255,0.85)" }}
                                 >
-                                    <MessageSquare size={14} /> WhatsApp
-                                </a>
-                                <a
-                                    href="https://www.becalab.org/becabot"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-1.5 transition-colors hover:opacity-80"
-                                    style={{ color: colors.lightGreen }}
-                                >
-                                    <Globe size={14} /> Versión Web
-                                </a>
+                                    Antes de pagar el examen,{" "}
+                                    <strong style={{ color: "#fff" }}>
+                                        confirma que tu universidad ya acepta la escala 1-6
+                                    </strong>
+                                    . Algunas universidades top aún están actualizando sus sistemas
+                                    de admisión.
+                                </p>
                             </div>
                         </div>
-                    </section>
 
-                    {/* ─── BECALAB+ SECTION ─── */}
-                    <section
-                        className="relative mb-4 overflow-hidden rounded-[2.5rem] p-8 text-center shadow-2xl"
-                        style={{ backgroundColor: "rgba(213,237,134,0.08)", border: "1px solid rgba(213,237,134,0.25)" }}
-                    >
-                        <div className="relative z-10 flex flex-col items-center">
-                            <div className="mb-6 h-24 w-24 -rotate-2 overflow-hidden rounded-3xl shadow-2xl transition-transform hover:rotate-0">
-                                <img
-                                    src="/images/becalabplus-logo.png"
-                                    alt="BecaLab+ Logo"
-                                    width={96}
-                                    height={96}
-                                    className="h-full w-full object-cover"
-                                />
-                            </div>
-                            <h3 className="mb-2 text-2xl font-black" style={{ color: colors.lightGreen }}>
-                                ¿Buscas asesoría personalizada?
-                            </h3>
-                            <p className="mb-8 max-w-xs text-sm leading-relaxed" style={{ color: colors.lavender }}>
-                                Conoce{" "}
-                                <strong style={{ color: "#ffffff" }}>BecaLab+</strong>
-                                , nuestro programa de mentoría 100% personalizada para que apliques con confianza.
-                            </p>
-                            <a
-                                href="https://www.becalab.org/plus"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-black shadow-lg transition-all hover:brightness-110 active:scale-[0.98]"
-                                style={{ backgroundColor: colors.lightGreen, color: colors.darkBlue }}
-                            >
-                                CONOCER BECALAB+ <ChevronRight size={20} />
-                            </a>
-                        </div>
-                    </section>
-
-                    {/* ─── CONTACT + BACK ─── */}
-                    <div className="mt-4 space-y-3">
-                        <button
-                            onClick={() => {
-                                setIsSuccess(false)
-                                setFormData({
-                                    name: "",
-                                    email: "",
-                                    country: "",
-                                    level: "pregrado",
-                                    travel_year: "",
-                                })
-                                setError("")
-                            }}
-                            className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 py-3.5 text-xs font-black uppercase tracking-widest transition-all hover:brightness-110 active:scale-[0.98]"
-                            style={{
-                                borderColor: `${colors.lavender}40`,
-                                color: "#ffffff",
-                                backgroundColor: "transparent",
-                            }}
+                        {/* ─── BECABOT SECTION ─── */}
+                        <section
+                            className="relative mt-6 mb-4 overflow-hidden rounded-[2.5rem] p-8 text-center shadow-2xl"
+                            style={{ backgroundColor: "rgba(75,80,208,0.25)", border: "1px solid rgba(177,162,210,0.2)" }}
                         >
-                            ← Volver al inicio
-                        </button>
-
-                        <div className="flex items-center justify-center gap-1.5 pt-2">
-                            <Mail size={13} style={{ color: colors.lavender }} />
-                            <p
-                                className="text-xs leading-relaxed"
-                                style={{ color: colors.lavender }}
-                            >
-                                ¿Necesitas ayuda? Escríbenos a{" "}
+                            <div className="relative z-10 flex flex-col items-center">
+                                <div className="mb-6 h-24 w-24 rotate-2 overflow-hidden rounded-3xl shadow-2xl transition-transform hover:rotate-0">
+                                    <img
+                                        src="/images/becabot-logo.png"
+                                        alt="BecaBot Logo"
+                                        width={96}
+                                        height={96}
+                                        className="h-full w-full object-cover"
+                                    />
+                                </div>
+                                <h3 className="mb-2 text-2xl font-black" style={{ color: "#ffffff" }}>
+                                    ¿Quieres más becas?
+                                </h3>
+                                <p className="mb-8 max-w-xs text-sm leading-relaxed" style={{ color: colors.lavender }}>
+                                    Encuentra cientos de opciones en{" "}
+                                    <strong style={{ color: colors.lightGreen }}>BecaBot</strong>
+                                    , disponible en WhatsApp y Web.
+                                </p>
                                 <a
-                                    href="mailto:info@becalab.org"
-                                    className="font-bold underline underline-offset-2 transition-colors hover:opacity-80"
-                                    style={{ color: colors.lightGreen }}
+                                    href="https://www.becalab.org/becabot"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-black shadow-lg transition-all hover:brightness-110 active:scale-[0.98]"
+                                    style={{ backgroundColor: colors.lightGreen, color: colors.darkBlue }}
                                 >
-                                    info@becalab.org
+                                    IR A BECABOT <ChevronRight size={20} />
                                 </a>
-                            </p>
-                        </div>
-                    </div>
+                                <div className="mt-6 flex justify-center gap-6 text-[10px] font-black uppercase tracking-widest">
+                                    <a
+                                        href="https://www.becalab.org/becabot"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-1.5 transition-colors hover:opacity-80"
+                                        style={{ color: colors.lightGreen }}
+                                    >
+                                        <MessageSquare size={14} /> WhatsApp
+                                    </a>
+                                    <a
+                                        href="https://www.becalab.org/becabot"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-1.5 transition-colors hover:opacity-80"
+                                        style={{ color: colors.lightGreen }}
+                                    >
+                                        <Globe size={14} /> Versión Web
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
 
-                    <p
-                        className="mt-6 pb-8 text-center text-[10px] font-bold uppercase tracking-[0.4em]"
-                        style={{ color: "rgba(177,162,210,0.5)" }}
-                    >
-                        BecaLab &copy; 2026
-                    </p>
+                        {/* ─── BECALAB+ SECTION ─── */}
+                        <section
+                            className="relative mb-4 overflow-hidden rounded-[2.5rem] p-8 text-center shadow-2xl"
+                            style={{ backgroundColor: "rgba(213,237,134,0.08)", border: "1px solid rgba(213,237,134,0.25)" }}
+                        >
+                            <div className="relative z-10 flex flex-col items-center">
+                                <div className="mb-6 h-24 w-24 -rotate-2 overflow-hidden rounded-3xl shadow-2xl transition-transform hover:rotate-0">
+                                    <img
+                                        src="/images/becalabplus-logo.png"
+                                        alt="BecaLab+ Logo"
+                                        width={96}
+                                        height={96}
+                                        className="h-full w-full object-cover"
+                                    />
+                                </div>
+                                <h3 className="mb-2 text-2xl font-black" style={{ color: colors.lightGreen }}>
+                                    ¿Buscas asesoría personalizada?
+                                </h3>
+                                <p className="mb-8 max-w-xs text-sm leading-relaxed" style={{ color: colors.lavender }}>
+                                    Conoce{" "}
+                                    <strong style={{ color: "#ffffff" }}>BecaLab+</strong>
+                                    , nuestro programa de mentoría 100% personalizada para que apliques con confianza.
+                                </p>
+                                <a
+                                    href="https://www.becalab.org/plus"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-black shadow-lg transition-all hover:brightness-110 active:scale-[0.98]"
+                                    style={{ backgroundColor: colors.lightGreen, color: colors.darkBlue }}
+                                >
+                                    CONOCER BECALAB+ <ChevronRight size={20} />
+                                </a>
+                            </div>
+                        </section>
+
+                        {/* ─── CONTACT + BACK ─── */}
+                        <div className="mt-4 space-y-3">
+                            <button
+                                onClick={() => {
+                                    setIsSuccess(false)
+                                    setFormData({
+                                        name: "",
+                                        email: "",
+                                        country: "",
+                                        level: "pregrado",
+                                        travel_year: "",
+                                    })
+                                    setError("")
+                                }}
+                                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 py-3.5 text-xs font-black uppercase tracking-widest transition-all hover:brightness-110 active:scale-[0.98]"
+                                style={{
+                                    borderColor: `${colors.lavender}40`,
+                                    color: "#ffffff",
+                                    backgroundColor: "transparent",
+                                }}
+                            >
+                                ← Volver al inicio
+                            </button>
+
+                            <div className="flex items-center justify-center gap-1.5 pt-2">
+                                <Mail size={13} style={{ color: colors.lavender }} />
+                                <p
+                                    className="text-xs leading-relaxed"
+                                    style={{ color: colors.lavender }}
+                                >
+                                    ¿Necesitas ayuda? Escríbenos a{" "}
+                                    <a
+                                        href="mailto:info@becalab.org"
+                                        className="font-bold underline underline-offset-2 transition-colors hover:opacity-80"
+                                        style={{ color: colors.lightGreen }}
+                                    >
+                                        info@becalab.org
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <p
+                            className="mt-6 pb-8 text-center text-[10px] font-bold uppercase tracking-[0.4em]"
+                            style={{ color: "rgba(177,162,210,0.5)" }}
+                        >
+                            BecaLab &copy; 2026
+                        </p>
+                    </div>
                 </div>
             </div>
         )
