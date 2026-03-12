@@ -86,7 +86,7 @@ function GuideSection({
                 </div>
                 <div className="flex-1">
                     <p className="text-sm font-bold" style={{ color: "#ffffff" }}>
-                        {emoji} {title}
+                        {title}
                     </p>
                 </div>
                 <ChevronDown
@@ -505,7 +505,7 @@ export function ToeflForm() {
                                 </p>
                                 <Tip>
                                     Sé directo. Usa un saludo formal, el cuerpo del mensaje y una
-                                    despedida clara. No rellenes con paja.
+                                    despedida clara. No rellenes por rellenar.
                                 </Tip>
 
                                 <p className="mb-1 mt-3">
@@ -548,6 +548,21 @@ export function ToeflForm() {
                                         </strong>{" "}
                                         Solo confía en materiales que mencionen el cambio de enero
                                         2026.
+                                    </li>
+                                    <li>
+                                        <strong style={{ color: "#fff" }}>
+                                            Canal recomendado:
+                                        </strong>{" "}
+                                        <a
+                                            href="https://www.youtube.com/@linguamarina"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="font-bold underline underline-offset-2"
+                                            style={{ color: colors.lightGreen }}
+                                        >
+                                            Linguamarina en YouTube
+                                        </a>{" "}
+                                        — tiene los mejores tips para prepararte.
                                     </li>
                                 </ul>
                             </GuideSection>
