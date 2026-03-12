@@ -139,7 +139,10 @@ export function ToeflForm() {
         travel_year: "",
     })
 
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    const knownShortTlds = ['co', 'mx', 'ar', 'br', 'cl', 'uk', 'us', 'es', 'de', 'fr', 'it', 'nl', 'pt', 'io', 'ai', 'me', 'tv', 'hn', 'sv', 'gt', 'py', 'uy', 'pe', 'bo', 'ec', 'cr', 'pa', 'ni', 've', 'cu', 'do', 'pr']
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    const emailTld = formData.email.split('.').pop()?.toLowerCase() || ''
+    const isValidEmail = emailRegex.test(formData.email) && (emailTld.length >= 3 || knownShortTlds.includes(emailTld))
     const [emailTouched, setEmailTouched] = useState(false)
 
     const canSubmit =
