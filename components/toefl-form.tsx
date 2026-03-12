@@ -135,7 +135,7 @@ export function ToeflForm() {
         name: "",
         email: "",
         country: "",
-        level: "pregrado",
+        level: "",
         travel_year: "",
     })
 
@@ -819,11 +819,18 @@ export function ToeflForm() {
                                     setFormData((prev) => ({ ...prev, name: e.target.value }))
                                 }
                                 placeholder="Tu nombre"
-                                className="w-full rounded-2xl border-2 px-4 py-3 text-sm transition-all focus:outline-none"
+                                className="w-full rounded-2xl border-2 px-4 py-3 text-sm transition-all duration-300 focus:outline-none"
                                 style={{
-                                    borderColor: "rgba(255,255,255,0.2)",
-                                    backgroundColor: "rgba(255,255,255,0.1)",
+                                    borderColor: formData.name.trim()
+                                        ? `${colors.lightGreen}50`
+                                        : "rgba(255,255,255,0.2)",
+                                    backgroundColor: formData.name.trim()
+                                        ? "rgba(213,237,134,0.08)"
+                                        : "rgba(255,255,255,0.1)",
                                     color: "#ffffff",
+                                    boxShadow: formData.name.trim()
+                                        ? `0 0 12px ${colors.lightGreen}15`
+                                        : "none",
                                 }}
                             />
                         </div>
@@ -845,13 +852,20 @@ export function ToeflForm() {
                                 }
                                 onBlur={() => setEmailTouched(true)}
                                 placeholder="tucorreo@ejemplo.com"
-                                className="w-full rounded-2xl border-2 px-4 py-3 text-sm transition-all focus:outline-none"
+                                className="w-full rounded-2xl border-2 px-4 py-3 text-sm transition-all duration-300 focus:outline-none"
                                 style={{
                                     borderColor: emailTouched && formData.email && !isValidEmail
                                         ? "rgba(239,68,68,0.6)"
-                                        : "rgba(255,255,255,0.2)",
-                                    backgroundColor: "rgba(255,255,255,0.1)",
+                                        : formData.email.trim() && isValidEmail
+                                            ? `${colors.lightGreen}50`
+                                            : "rgba(255,255,255,0.2)",
+                                    backgroundColor: formData.email.trim() && isValidEmail
+                                        ? "rgba(213,237,134,0.08)"
+                                        : "rgba(255,255,255,0.1)",
                                     color: "#ffffff",
+                                    boxShadow: formData.email.trim() && isValidEmail
+                                        ? `0 0 12px ${colors.lightGreen}15`
+                                        : "none",
                                 }}
                             />
                             {emailTouched && formData.email && !isValidEmail && (
@@ -876,11 +890,18 @@ export function ToeflForm() {
                                     onChange={(e) =>
                                         setFormData((prev) => ({ ...prev, country: e.target.value }))
                                     }
-                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all focus:outline-none"
+                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all duration-300 focus:outline-none"
                                     style={{
-                                        borderColor: "rgba(255,255,255,0.2)",
-                                        backgroundColor: "rgba(255,255,255,0.1)",
+                                        borderColor: formData.country
+                                            ? `${colors.lightGreen}50`
+                                            : "rgba(255,255,255,0.2)",
+                                        backgroundColor: formData.country
+                                            ? "rgba(213,237,134,0.08)"
+                                            : "rgba(255,255,255,0.1)",
                                         color: formData.country ? "#ffffff" : "rgba(255,255,255,0.5)",
+                                        boxShadow: formData.country
+                                            ? `0 0 12px ${colors.lightGreen}15`
+                                            : "none",
                                     }}
                                 >
                                     <option value="">Selecciona tu país</option>
@@ -909,13 +930,21 @@ export function ToeflForm() {
                                     onChange={(e) =>
                                         setFormData((prev) => ({ ...prev, level: e.target.value }))
                                     }
-                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all focus:outline-none"
+                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all duration-300 focus:outline-none"
                                     style={{
-                                        borderColor: "rgba(255,255,255,0.2)",
-                                        backgroundColor: "rgba(255,255,255,0.1)",
-                                        color: "#ffffff",
+                                        borderColor: formData.level
+                                            ? `${colors.lightGreen}50`
+                                            : "rgba(255,255,255,0.2)",
+                                        backgroundColor: formData.level
+                                            ? "rgba(213,237,134,0.08)"
+                                            : "rgba(255,255,255,0.1)",
+                                        color: formData.level ? "#ffffff" : "rgba(255,255,255,0.5)",
+                                        boxShadow: formData.level
+                                            ? `0 0 12px ${colors.lightGreen}15`
+                                            : "none",
                                     }}
                                 >
+                                    <option value="">Selecciona tu nivel</option>
                                     {levels.map((l) => (
                                         <option key={l.value} value={l.value}>
                                             {l.label}
@@ -944,13 +973,20 @@ export function ToeflForm() {
                                             travel_year: e.target.value,
                                         }))
                                     }
-                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all focus:outline-none"
+                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all duration-300 focus:outline-none"
                                     style={{
-                                        borderColor: "rgba(255,255,255,0.2)",
-                                        backgroundColor: "rgba(255,255,255,0.1)",
+                                        borderColor: formData.travel_year
+                                            ? `${colors.lightGreen}50`
+                                            : "rgba(255,255,255,0.2)",
+                                        backgroundColor: formData.travel_year
+                                            ? "rgba(213,237,134,0.08)"
+                                            : "rgba(255,255,255,0.1)",
                                         color: formData.travel_year
                                             ? "#ffffff"
                                             : "rgba(255,255,255,0.5)",
+                                        boxShadow: formData.travel_year
+                                            ? `0 0 12px ${colors.lightGreen}15`
+                                            : "none",
                                     }}
                                 >
                                     <option value="">Selecciona una opción</option>
