@@ -4,7 +4,6 @@ import { useState } from "react"
 import {
     ChevronRight,
     CheckCircle2,
-    Sparkles,
     Loader2,
     Info,
     BookOpen,
@@ -15,6 +14,9 @@ import {
     AlertTriangle,
     Target,
     ChevronDown,
+    Globe,
+    MessageSquare,
+    Mail,
 } from "lucide-react"
 
 const colors = {
@@ -137,12 +139,16 @@ export function ToeflForm() {
         travel_year: "",
     })
 
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    const [emailTouched, setEmailTouched] = useState(false)
+
     const canSubmit =
         !!formData.name.trim() &&
         !!formData.email.trim() &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+        isValidEmail &&
         !!formData.country &&
-        !!formData.level
+        !!formData.level &&
+        !!formData.travel_year
 
     const handleSubmit = async () => {
         if (!canSubmit) return
@@ -154,7 +160,7 @@ export function ToeflForm() {
             email: formData.email.trim().toLowerCase(),
             country: formData.country,
             level: formData.level,
-            travel_year: formData.travel_year || null,
+            travel_year: formData.travel_year,
         }
 
         try {
@@ -508,22 +514,98 @@ export function ToeflForm() {
                         </div>
                     </div>
 
-                    {/* ─── BOTTOM CTAs ─── */}
-                    <div className="mt-4 space-y-3">
-                        <a
-                            href="https://www.becalab.org/becabot"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-xs font-black uppercase tracking-widest shadow-lg transition-all hover:brightness-105 active:scale-[0.98]"
-                            style={{
-                                backgroundColor: colors.lightGreen,
-                                color: colors.darkBlue,
-                            }}
-                        >
-                            <Sparkles size={14} />
-                            Explorar más becas con BecaBot
-                        </a>
+                    {/* ─── BECABOT SECTION ─── */}
+                    <section
+                        className="relative mt-6 mb-4 overflow-hidden rounded-[2.5rem] p-8 text-center shadow-2xl"
+                        style={{ backgroundColor: "rgba(75,80,208,0.25)", border: "1px solid rgba(177,162,210,0.2)" }}
+                    >
+                        <div className="relative z-10 flex flex-col items-center">
+                            <div className="mb-6 h-24 w-24 rotate-2 overflow-hidden rounded-3xl shadow-2xl transition-transform hover:rotate-0">
+                                <img
+                                    src="/images/becabot-logo.png"
+                                    alt="BecaBot Logo"
+                                    width={96}
+                                    height={96}
+                                    className="h-full w-full object-cover"
+                                />
+                            </div>
+                            <h3 className="mb-2 text-2xl font-black" style={{ color: "#ffffff" }}>
+                                ¿Quieres más becas?
+                            </h3>
+                            <p className="mb-8 max-w-xs text-sm leading-relaxed" style={{ color: colors.lavender }}>
+                                Encuentra cientos de opciones en{" "}
+                                <strong style={{ color: colors.lightGreen }}>BecaBot</strong>
+                                , disponible en WhatsApp y Web.
+                            </p>
+                            <a
+                                href="https://www.becalab.org/becabot"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-black shadow-lg transition-all hover:brightness-110 active:scale-[0.98]"
+                                style={{ backgroundColor: colors.lightGreen, color: colors.darkBlue }}
+                            >
+                                IR A BECABOT <ChevronRight size={20} />
+                            </a>
+                            <div className="mt-6 flex justify-center gap-6 text-[10px] font-black uppercase tracking-widest">
+                                <a
+                                    href="https://www.becalab.org/becabot"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-1.5 transition-colors hover:opacity-80"
+                                    style={{ color: colors.lightGreen }}
+                                >
+                                    <MessageSquare size={14} /> WhatsApp
+                                </a>
+                                <a
+                                    href="https://www.becalab.org/becabot"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-1.5 transition-colors hover:opacity-80"
+                                    style={{ color: colors.lightGreen }}
+                                >
+                                    <Globe size={14} /> Versión Web
+                                </a>
+                            </div>
+                        </div>
+                    </section>
 
+                    {/* ─── BECALAB+ SECTION ─── */}
+                    <section
+                        className="relative mb-4 overflow-hidden rounded-[2.5rem] p-8 text-center shadow-2xl"
+                        style={{ backgroundColor: "rgba(213,237,134,0.08)", border: "1px solid rgba(213,237,134,0.25)" }}
+                    >
+                        <div className="relative z-10 flex flex-col items-center">
+                            <div className="mb-6 h-24 w-24 -rotate-2 overflow-hidden rounded-3xl shadow-2xl transition-transform hover:rotate-0">
+                                <img
+                                    src="/images/becalabplus-logo.png"
+                                    alt="BecaLab+ Logo"
+                                    width={96}
+                                    height={96}
+                                    className="h-full w-full object-cover"
+                                />
+                            </div>
+                            <h3 className="mb-2 text-2xl font-black" style={{ color: colors.lightGreen }}>
+                                ¿Buscas asesoría personalizada?
+                            </h3>
+                            <p className="mb-8 max-w-xs text-sm leading-relaxed" style={{ color: colors.lavender }}>
+                                Conoce{" "}
+                                <strong style={{ color: "#ffffff" }}>BecaLab+</strong>
+                                , nuestro programa de mentoría 100% personalizada para que apliques con confianza.
+                            </p>
+                            <a
+                                href="https://www.becalab.org/plus"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-black shadow-lg transition-all hover:brightness-110 active:scale-[0.98]"
+                                style={{ backgroundColor: colors.lightGreen, color: colors.darkBlue }}
+                            >
+                                CONOCER BECALAB+ <ChevronRight size={20} />
+                            </a>
+                        </div>
+                    </section>
+
+                    {/* ─── CONTACT + BACK ─── */}
+                    <div className="mt-4 space-y-3">
                         <button
                             onClick={() => {
                                 setIsSuccess(false)
@@ -546,20 +628,16 @@ export function ToeflForm() {
                             ← Volver al inicio
                         </button>
 
-                        <div className="flex items-start gap-2 opacity-70 pt-2">
-                            <Info
-                                size={12}
-                                className="mt-0.5 shrink-0"
-                                style={{ color: colors.lavender }}
-                            />
+                        <div className="flex items-center justify-center gap-1.5 pt-2">
+                            <Mail size={13} style={{ color: colors.lavender }} />
                             <p
-                                className="text-[9px] leading-tight"
+                                className="text-xs leading-relaxed"
                                 style={{ color: colors.lavender }}
                             >
-                                También puedes escribirnos a{" "}
+                                ¿Necesitas ayuda? Escríbenos a{" "}
                                 <a
                                     href="mailto:info@becalab.org"
-                                    className="font-bold underline"
+                                    className="font-bold underline underline-offset-2 transition-colors hover:opacity-80"
                                     style={{ color: colors.lightGreen }}
                                 >
                                     info@becalab.org
@@ -680,14 +758,22 @@ export function ToeflForm() {
                                 onChange={(e) =>
                                     setFormData((prev) => ({ ...prev, email: e.target.value }))
                                 }
+                                onBlur={() => setEmailTouched(true)}
                                 placeholder="tucorreo@ejemplo.com"
                                 className="w-full rounded-2xl border-2 px-4 py-3 text-sm transition-all focus:outline-none"
                                 style={{
-                                    borderColor: "rgba(255,255,255,0.2)",
+                                    borderColor: emailTouched && formData.email && !isValidEmail
+                                        ? "rgba(239,68,68,0.6)"
+                                        : "rgba(255,255,255,0.2)",
                                     backgroundColor: "rgba(255,255,255,0.1)",
                                     color: "#ffffff",
                                 }}
                             />
+                            {emailTouched && formData.email && !isValidEmail && (
+                                <p className="ml-2 text-[10px] font-bold" style={{ color: "#fca5a5" }}>
+                                    ⚠ Por favor, introduce un correo electrónico válido
+                                </p>
+                            )}
                         </div>
 
                         {/* Country */}
@@ -698,26 +784,29 @@ export function ToeflForm() {
                             >
                                 País
                             </label>
-                            <select
-                                required
-                                value={formData.country}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({ ...prev, country: e.target.value }))
-                                }
-                                className="w-full appearance-none rounded-2xl border-2 px-4 py-3 text-sm transition-all focus:outline-none"
-                                style={{
-                                    borderColor: "rgba(255,255,255,0.2)",
-                                    backgroundColor: "rgba(255,255,255,0.1)",
-                                    color: formData.country ? "#ffffff" : "rgba(255,255,255,0.5)",
-                                }}
-                            >
-                                <option value="">Selecciona tu país</option>
-                                {countries.map((c) => (
-                                    <option key={c} value={c}>
-                                        {c}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="relative">
+                                <select
+                                    required
+                                    value={formData.country}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({ ...prev, country: e.target.value }))
+                                    }
+                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all focus:outline-none"
+                                    style={{
+                                        borderColor: "rgba(255,255,255,0.2)",
+                                        backgroundColor: "rgba(255,255,255,0.1)",
+                                        color: formData.country ? "#ffffff" : "rgba(255,255,255,0.5)",
+                                    }}
+                                >
+                                    <option value="">Selecciona tu país</option>
+                                    {countries.map((c) => (
+                                        <option key={c} value={c}>
+                                            {c}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" style={{ color: colors.lavender }} />
+                            </div>
                         </div>
 
                         {/* Level */}
@@ -728,25 +817,28 @@ export function ToeflForm() {
                             >
                                 Nivel académico
                             </label>
-                            <select
-                                required
-                                value={formData.level}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({ ...prev, level: e.target.value }))
-                                }
-                                className="w-full appearance-none rounded-2xl border-2 px-4 py-3 text-sm transition-all focus:outline-none"
-                                style={{
-                                    borderColor: "rgba(255,255,255,0.2)",
-                                    backgroundColor: "rgba(255,255,255,0.1)",
-                                    color: "#ffffff",
-                                }}
-                            >
-                                {levels.map((l) => (
-                                    <option key={l.value} value={l.value}>
-                                        {l.label}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="relative">
+                                <select
+                                    required
+                                    value={formData.level}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({ ...prev, level: e.target.value }))
+                                    }
+                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all focus:outline-none"
+                                    style={{
+                                        borderColor: "rgba(255,255,255,0.2)",
+                                        backgroundColor: "rgba(255,255,255,0.1)",
+                                        color: "#ffffff",
+                                    }}
+                                >
+                                    {levels.map((l) => (
+                                        <option key={l.value} value={l.value}>
+                                            {l.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" style={{ color: colors.lavender }} />
+                            </div>
                         </div>
 
                         {/* Travel Year */}
@@ -755,35 +847,36 @@ export function ToeflForm() {
                                 className="ml-2 text-[10px] font-black uppercase tracking-widest"
                                 style={{ color: "rgba(255,255,255,0.7)" }}
                             >
-                                ¿Cuándo planeas viajar?{" "}
-                                <span style={{ color: "rgba(255,255,255,0.4)" }}>
-                                    (opcional)
-                                </span>
+                                ¿Cuándo planeas viajar?
                             </label>
-                            <select
-                                value={formData.travel_year}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        travel_year: e.target.value,
-                                    }))
-                                }
-                                className="w-full appearance-none rounded-2xl border-2 px-4 py-3 text-sm transition-all focus:outline-none"
-                                style={{
-                                    borderColor: "rgba(255,255,255,0.2)",
-                                    backgroundColor: "rgba(255,255,255,0.1)",
-                                    color: formData.travel_year
-                                        ? "#ffffff"
-                                        : "rgba(255,255,255,0.5)",
-                                }}
-                            >
-                                <option value="">Selecciona una opción</option>
-                                {travelYears.map((y) => (
-                                    <option key={y.value} value={y.value}>
-                                        {y.label}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="relative">
+                                <select
+                                    required
+                                    value={formData.travel_year}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            travel_year: e.target.value,
+                                        }))
+                                    }
+                                    className="w-full appearance-none rounded-2xl border-2 px-4 py-3 pr-10 text-sm transition-all focus:outline-none"
+                                    style={{
+                                        borderColor: "rgba(255,255,255,0.2)",
+                                        backgroundColor: "rgba(255,255,255,0.1)",
+                                        color: formData.travel_year
+                                            ? "#ffffff"
+                                            : "rgba(255,255,255,0.5)",
+                                    }}
+                                >
+                                    <option value="">Selecciona una opción</option>
+                                    {travelYears.map((y) => (
+                                        <option key={y.value} value={y.value}>
+                                            {y.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" style={{ color: colors.lavender }} />
+                            </div>
                         </div>
                     </div>
 

@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
         const { name, email, country, level, travel_year } = body
 
-        if (!name || !email || !country || !level) {
+        if (!name || !email || !country || !level || !travel_year) {
             return NextResponse.json(
                 { error: "Todos los campos son obligatorios" },
                 { status: 400 }
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
                     email,
                     country,
                     level,
-                    travel_year: travel_year || null,
+                    travel_year,
                     post_name: "toefl-2026",
                 },
             ])
